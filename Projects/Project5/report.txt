@@ -1,0 +1,122 @@
+test cases:
+
+void testone(int n)
+{
+const int MAX_WORD_LENGTH = 20;
+const int SIZE = 4;
+
+char correct1[SIZE][MAX_WORD_LENGTH+1] = {
+"mad", "deranged", "nefarious", "have"};
+char correct2[SIZE][MAX_WORD_LENGTH+1] = {
+ "scientist", "robot", "plot", "mad"};
+int corr_separation[SIZE] = {0, 1, 2, 1};
+int nPatterns = 4;
+
+char empty[][5] = {}; 
+
+char flip1[SIZE][MAX_WORD_LENGTH+1]  = {
+"mad", "deranged", "scientist", "robot"};
+char flip2[SIZE][MAX_WORD_LENGTH+1]  = {
+"scientist", "robot", "mad", "deranged"}
+
+char capital1[SIZE][MAX_WORD_LENGTH+1] = {
+"MAD","DERANGED", "scienTist", "rObot"};
+char capital2[SIZE][MAX_WORD_LENGTH+1] = {
+"sCientist", "robot", "mAd", "deRanged"};
+
+
+//Vanilla cases
+char noletter [SIZE][MAX_WORD_LENGTH+1] = {"!@$", "[0;", "=/*", "+++"};
+
+
+switch(n)
+{
+case 0:
+assert(makeproper(correct1, correct2, corr_separation, nPatterns)== 4);
+break; 
+
+case 1:
+assert(makeproper(correct1, correct1, corr_separation, nPatterns)== 4);
+break;
+
+case 2:
+assert(makeproper(correct2, correct1, corr_separation, nPatterns)== 4);
+break;
+
+case 3:
+assert(makeproper(correct2, correct2, corr_separation, nPatterns)== 4);
+break;
+
+case 4:
+assert(makeproper(flip1, flip2, corr_separation, nPatterns)== 2);
+break;
+
+case 5:
+assert(makeproper(capital1, capital2, corr_separation, nPatterns)== 2);
+break;
+
+case 6:
+int wrg_separation[SIZE] = {-1, -1,  -1, -1};
+assert(makeproper(correct1, correct2, wrg_separation, nPatterns)== 3);
+break;
+
+case 7:
+assert(makeproper(correct1, correct2, corr_separation, 0)== 0);
+break;
+
+case 8:
+assert(makeproper(correct1, correct2, corr_separation, -1)== 0);
+break;
+
+case 9:
+assert(rate("deranged deranged robot deranged robot robot", correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+
+case 10:			
+assert(rate("deranged   robot deranged robot robot", correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+
+case 11:			
+assert(rate("    deranged deranged robot robot", correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+
+case 12:		
+assert(rate("DERANGED robot deranged robot robot", correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+	
+case 13:		
+assert(rate("deranged mad robot had a nefarious plot", correct1, correct2, corr_separation, nPatterns) == 2);
+break;
+	
+case 14:		
+assert(rate("/@*#) mad =/*+ had a nefarious plot", correct1, 
+correct2, corr_separation, nPatterns) == 1);
+break;
+	
+case 15:		
+assert(rate("deranged mad robots had a nefarious plot",correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+	
+case 16:		
+assert(rate("the mad U C L A scientist ", correct1, correct2, corr_separation, nPatterns) == 0);
+break;
+
+case 17:
+assert(rate("robot deranged", correct1, correct2, corr_separation, nPatterns) == 1);
+break;
+}
+}
+
+int main()
+{
+    cout << "Enter a test number (1 to 84): ";
+    int n;
+    cin >> n;
+    if (n < 1  ||  n > 84)
+    {
+	cout << "Bad test number" << endl;
+	return 1;
+    }
+    testone(n);
+    cout << "Passed test " << n << endl;
+}
