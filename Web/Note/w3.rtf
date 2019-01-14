@@ -1,0 +1,390 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;\red251\green2\blue7;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;\cssrgb\c100000\c14913\c0;}
+\margl1440\margr1440\vieww25400\viewh14580\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 3, monday\
+april 16, 2018
+\f1\b0 \
+\
+#include <iostream>\
+using namespace std;\
+\
+int main()\
+\{\
+	const double PAYRATE_THRESHOLD = 14.00; // const = cannot change it!\
+	const double HIGH_WITHHOLDING_RATE = 0.10;\
+	const double LOW_WITHHOLDING_RATE = 0.05;\
+\
+	PAYRATE_THRESHOLD = 15.00; \cf3 // Error! Won\'92t compile! PAYRATE_THRESHOLD is const!\cf2 \
+\
+	cout << \'93How many hours did you work? \'94;\
+	double hoursWorked;\
+	cin >> hoursWorked;\
+\
+	// cout << \'93Hrs worked: \'93 << hoursWorked << endl;\
+\
+	cout << \'93What is your hourly rate of pay? \'94;\
+	double payRate;\
+	cin >> payRate;\
+\
+	double amtEarned = hoursWorked * payRate\
+\
+	cout.setf(ios::fixed);\
+	cout.precision(2);\
+	cout << \'93You earned $\'94 << amtEarned << endl;\
+\
+	double withholdingRate;\
+	if (payRate >= PAYRATE_THRESHOLD)\
+		withholdingRate = HIGH_WITHHOLDING_RATE;\
+	else\
+		withholdingRate = LOW_WITHHOLDING_RATE;\
+\
+	cout << \'93$\'94 << (amtEarned * withholdingRate) << \'93 will be withheld.\'94 << endl;\
+\}\
+\
+\
+\
+\
+\
+string citizenship;\
+int age;\
+\
+...\
+\
+if (citizenship == \'93USA\'94)\
+	\{\
+	if (age >= 18)\
+		cout << \'93You can vote in U.S. elections\'94 << endl;\
+	\}\
+else\
+	cout << \'93You are not a U.S. citizen.\'94 << endl;\
+\
+\
+\
+if (
+\f2\i expression1 
+\f1\i0 && 
+\f2\i expression2
+\f1\i0 )		\'93and\'94\
+\
+if (
+\f2\i expression1 
+\f1\i0 || 
+\f2\i expression2
+\f1\i0 )		\'93or\'94\
+\
+\
+if (citizenship == \'93USA\'94 && age >= 18)\
+	cout << \'93You can vote in U.S. elections.\'94 << endl;\
+\
+if (a/b + c/d > 10) // problem if b or d = 0\
+\
+if (b != 0 && d != 0 && a/b + c/d > 10) // Fine\
+\
+if (a/b + c/d > 10 && b != 0 && d != 0) // Undefined behavior if b = 0 or d = 0\
+\
+if (citizenship == \'93USA\'94 || citizenship == \'93Canada\'94)\
+	cout << \'93The country code is 1\'94 << endl;\
+\
+if (citizenship == \'93USA\'94 || == \'93Canada\'94) // Error! Won\'92t compile!\
+\
+if (citizenship == \'93USA\'94 || \'93Canada\'94) // Will compile, but will always be true\
+\
+if (age == 18 || age == 19 || age == 20) // Fine\
+\
+if (age == 18 || 19 || 20) // will compile, but will always be true\
+\
+if (age >= 18 && age <= 20) // Fine\
+\
+if (age >= 18 && <= 20) // Error! Won\'92t compile\
+\
+if (18 <= age <= 20) // Will compile, but will always be true\
+\
+\
+%% has higher precedence than ||\
+\
+if ((citizenship == \'93US\'94 || citizenship == \'93Canada\'94) && age >= 18)\
+	...\
+\
+\
+flipping statements: need to be careful of less/greater than and equal to, switch || to &&\
+\
+if (citizenship != \'93USA\'94 || age < 18)\
+\{\
+	long\
+\}\
+else\
+	short\
+\
+vs\
+\
+if (citizenship == \'93USA\'94 && age >= 18)\
+\{\
+	short\
+\}\
+else\
+	long\
+\
+\
+if (rating < 1 || rating > 10)\
+\
+if (rating >= 1 && rating <= 10)\
+\
+\
+De Morgan\'92s Laws:\
+	not (A or B) ==> (not A) and (not B)\
+	not (A and B) ==> (not A) or (not B)\
+\
+\
+not (a > b) ==> a <= b\
+not (a < b) ==> a >= b\
+not (a >= b) ==> a < b\
+not (a <= b) ==> a > b\
+not (a == b) ==> a != b\
+not (a != b) ==> a == b\
+\
+\
+if (income < 30000)\
+	cout << \'93Low\'94;\
+else if (income > 100000)\
+	cout << \'93Medium\'94;\
+else if (income < 500000)\
+	cout << \'93High\'94;\
+else\
+	cout << \'93Very high\'94;\
+\
+\'93if ladder\'94\
+\
+\
+\
+int main()\
+\{\
+	...\
+	int choice;\
+	cin >> choice;\
+	...\
+\
+	if (choice == 1)\
+		...\
+	else if (choice == 2 || choice == 4)\
+		...\
+	else if (choice == 3 || choice == 5)\
+		...\
+	else\
+	\{\
+		cout << \'93Choice must be 1 through 5.\'94 << endl;\
+		return 1;\
+	\}\
+	...\
+	...\
+	...\
+\}\
+\
+\
+\
+switch (choice)\
+\{\
+	case 1:\
+		...\
+		break;\
+	case 2:\
+	case 4: // case 2 or 4 executes case 4 code\
+		...\
+		break; // kicks you out of the switch\
+	case 3:\
+	case 5:\
+		...\
+		break;\
+	default:\
+		...\
+\}\
+\
+\
+\
+\
+\
+
+\f0\b week 3, wednesday\
+april 18, 2018\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 cout << \'93How many people? \'93;\
+int numPeople;\
+cin >> numPeople;\
+\
+switch (numPeople)\
+\{\
+	case 0:\
+		cout << \'93Nobody\'94 << endl;\
+		break;\
+	case 1:\
+		cout << \'93One lonely person\'94 << endl;\
+		break;\
+	case 2:\
+		cout << \'93A happy couple\'94 << endl;\
+		break;\
+	case 3:\
+	case 4:\
+		cout << \'93A few people\'94 << endl;\
+		break;\
+	default:\
+		cout << \'93A lot of people!\'94 << endl;\
+\}\
+cout << \'93......" << endl;\
+\
+\
+switch (numPeople)\
+\{\
+	...\
+	case 10: case 11: case 12: case 13: case 14: case 15:\
+	...\
+\}\
+\
+CAN\'92T USE DOUBLES FOR SWITCH STATEMENTS\
+\
+\
+string city;\
+getline(cin, city);\
+switch (city) // Error! Won\'92t compile! Can\'92t switch on a string \
+\{\
+	case \'93Los Angeles\'94: // NO!\
+\}\
+\
+\
+\
+How many times do you want to be greeted? 
+\f2\i 3\
+
+\f1\i0 Hello\
+Hello\
+Hello\
+\
+\
+cout << \'93How many times do you want to be greeted? \'93;\
+int nTimes;\
+cin >> nTimes;\
+int n = 0;\
+while (n < nTimes)\
+\{\
+	cout << \'93Hello\'94 << endl;\
+	n += 1; // n++\
+\}\
+cout << \'93Good to see you.\'94 << endl;\
+\
+possible errors: off-by-one or fencepost error\
+\
+\
+\
+int n = 0;\
+while (n < nTimes)\
+\{\
+	...\
+	n++;\
+\}\
+\
+\
+\
+\
+for (int n = 0; n < nTimes; n++)\
+\{\
+	...\
+\}\
+\
+for (initialization; stay-in-loop condition; prepare-for-next-iteration)\
+	statement\
+\
+\
+\
+for (int n = 10; n >= 0; n++) \
+	cout << n << endl;\
+end\
+\
+What happens? n becomes the larger integer that can be represented on your computer, then it cycles back down to -2 billion and it stops (NOT INFINITE LOOP)\
+\
+\
+\
+\
+while (condition)\
+statement\
+\
+\
+\
+do\
+	statement\
+while (condition);\
+\
+int n = 0;\
+do\
+\{\
+	cout << \'93Hello\'94 << endl;\
+	n++;\
+\} while (n < nTimes);\
+// PROBLEM WHEN nTimes = 0!\
+\
+\
+\
+for (int r = 1; r <= 3; r++) // nested loop\
+\{\
+	for (int c = 1; c <= 4; c++)\
+	\{\
+	cout << \'93*\'94;\
+	\}\
+	cout << endl;\
+\}\
+\
+\
+\
+string s = \'93Hello\'94;\
+for (int k = 0; k != s.size(); k++) //(string name).size() finds length of string\
+	cout << s[k] << endl; // string name[number] calls that position character in the string\
+\
+\
+\
+where\
+   0 1 2 3 4\
+s: H e l l o\
+(start at 0)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

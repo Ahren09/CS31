@@ -1,0 +1,289 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww12560\viewh11280\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 7, monday\
+may 14, 2018
+\f1\b0 \
+\
+Pointers:\
+	Another way to implement passing by reference\
+	Traverse arrays\
+	Manipulate dynamic storage\
+	Represent relationships in data structures\
+\
+#include <cmath>\
+using namespace std;\
+\
+void polarToCartesian(double rho, double theta, double&xx, double&yy)\
+\
+int main()\
+\{\
+	double r;\
+	double angle;\
+	... get values for r and angle...\
+	double x;\
+	double y;\
+	polarToCartesian(r, angle, &x, &y);\
+	...\
+	double y2;\
+	polarToCartesian(2*r, angle, &x, &y2);\
+\}\
+\
+void polarToCartesian(double rho, double theta, double& xx, double& yy)\
+\{\
+	*xx = rho*cos(theta);\
+	*yy = rho*sin(theta);\
+\}\
+\
+\
+\
+double& means reference-to-double or another-name-for-some-double\
+double* means pointer-to-double or another-name-for-some-double\
+\
+the pointer can only hold an address, where the double is, not the actual double value\
+\
+&x means \'93generate a pointer to x\'94, \'93address of x\'94\
+*p means \'93follow the pointer p\'94, \'93the object that p points to\'94\
+\
+\
+\
+double a = 3.2;\
+double b = 5.1;\
+double* p = &a; // p holds a pointer to a\
+double* q = 7.6; // WILL NOT COMPILE!\
+double c = a;\
+double d = p; // WILL NOT COMPILE!\
+double d = *p; // follow the pointer p to arrive to a\
+p = b; // WILL NOT COMPILE!\
+p = &b; // both are pointer-to-double\
+// or *p = b; // both are double\
+\
+*p += 4; // takes the object that p points to and add 4 to it, b = 9.1\
+\
+int k = 2;\
+p = &k; // WILL NOT COMPILE because p is pointer-to-double but &k is pointer-to-int\
+\
+int* z = &k;\
+cout << (k*b); // writes 18.2\
+cout << (k*p); // WILL NOT COMPILE\
+cout << (k* *p);\
+\
+double* q;\
+*q = 4; // will compile but undefined behavior bc q isn\'92t point to anything, not initialized\
+\
+q = p;\
+double* r = &a;\
+*r = b; // a is now 9.1\
+\
+if (p == r) // false, comparing pointers\
+\
+if (p == q) // true, comparing pointers\
+\
+if (*p == *r) // true, comparing doubles\
+\
+\
+double da[5];\
+int k;\
+double* dp;\
+\
+for (int k = 0; k < 5; k++)\
+	da[k] = 3.6;\
+\
+for (dp = &da[0]; ...; ...;)\
+	*dp = 3.6;\
+\
+// same as *(&da[0]) which is same as da[0]\
+\
+\
+\
+\
+\
+
+\f0\b week 7, wednesday\
+may 16, 2018
+\f1\b0 \
+\
+double da[5];\
+int k;\
+double* dp;\
+\
+for (int k = 0; k < 5; k++)\
+	da[k] = 3.6;\
+\
+for (dp = &da[0]; dp < &da[5] (or da + 5); dp++)\
+	*dp = 3.6;\
+\
+
+\f0\b RULES
+\f1\b0 \
+1. *&x ==> x\
+2. &a[i] + j (integer) is allowed // changing index, not element\
+3. &a[i] < &a[j] // and other comparison tools, not comparing the elements it\'92s pointing to, just comparing the i and j indices\
+4. a ==> &a[0]\
+5. p[i] ==> *(p + i)\
+\
+all equivalent: // changing/incrementing index that dp is pointing too\
+dp++;\
+dp += 1;\
+dp = dp + 1;\
+dp = &da[0] + 1;\
+dp = &da[0 + 1]; \
+dp = &da[1];\
+\
+pointer arithmetic is in units of array positions\
+\
+you are allowed to generate a pointer for the element just past the array, but you cannot follow that pointer (undefined behavior)\
+\
+all equivalent: // generating a pointer to 5\
+&da[5]\
+&da[0 + 5]\
+&da[0] + 5\
+da + 5\
+\
+\
+int findMatch(const string a[] (or *a), int n, string target) // a[] and *a ONLY equivalent as a parameter to a function\
+\{\
+	for (int k = 0; k < n; k++)\
+	\{\
+		if (a[k] == target)\
+			return k;\
+	\}\
+	return -1;\
+\}\
+\
+int main()\
+\{\
+	string b[5] = \{\
+		\'93mickey\'94, \'93donald\'94, \'93minnie\'94, \'93goofy\'94, \'93pluto\'94\
+	\};\
+\
+	int n = findMatch(b, 5, \'93goofy\'94); // 3\
+	int m = findMatch(&b[0], 5, \'93goofy\'94); // 3\
+\
+	int j = findMatch(&b[2], 3, \'93goofy\'94); // int j = findMatch(b+2, 3, \'93goofy\'94); // this only looks at indices 2 and after aka minnie, goofy, pluto as 0, 1, 2\
+	int i = 2 + findMatch(&b[2], 3, \'93goofy\'94); // because j will return 0, 1, 2 when it\'92s really 2, 3, 4\
+\
+OR\
+	int j = findMatch(&b[2], 3, \'93goofy\'94);\
+	if (j != -1)\
+		i += 2;\
+\
+\}\
+\
+\
+\
+\
+int c[] = \{10, 20, 30\}; // didn\'92t provide a size but the compiler will count for me and put a 3 in the []\
+\
+\
+all equivalent:\
+a[k]\
+*(a + k)\
+*(b[0] + k)\
+*(&b[0 + k])\
+*&b[k]\
+b[k]\
+\
+\
+\
+\
+int findFirstNegative(double a[], int n)\
+\{\
+	for (int k = 0; k < n; k++)\
+	\{\
+		if (a[k] < 0)\
+			return k;\
+	\}\
+	return -1;\
+\}\
+\
+int main()\
+\{\
+	double da[5];\
+	...\
+	int fnpos = findFirstNegative(da, 5);\
+	if (fnpos == -1)\
+		cout << \'93There are no negative values in the array\'94 << endl;\
+	else\
+	\{\
+		cout << \'93The first negative value is \'93 << da[fnpos] << endl;\
+		cout << \'93It\'92s at element number \'93 << fnpos << endl;\
+	\}\
+\}\
+\
+OR\
+\
+int findFirstNegative(double a[], int n)\
+\{\
+	for (double* dp = a; dp < a + n; dp++)\
+	\{\
+		if (*dp < 0)\
+			return dp;\
+	\}\
+	return -1;\
+\}\
+\
+int main()\
+\{\
+	double da[5];\
+	...\
+	int fnpos = findFirstNegative(da, 5);\
+	if (fnpos == -1)\
+		cout << \'93There are no negative values in the array\'94 << endl;\
+	else\
+	\{\
+		cout << \'93The first negative value is \'93 << da[fnpos] << endl;\
+		cout << \'93It\'92s at element number \'93 << fnpos << endl;\
+	\}\
+\}\
+\
+\
+EQUIVALENT:\
+dp[0]\
+*(dp + 0)\
+*dp\
+\
+\
+OR\
+\
+int findFirstNegative(double a[], int n)\
+\{\
+	for (double* dp = a; dp < a + n; dp++)\
+	\{\
+		if (*dp < 0)\
+			return dp;\
+	\}\
+	return nullptr;\
+\}\
+\
+int main()\
+\{\
+	double da[5];\
+	...\
+	double* pfn = firstFirstNegative(da, 5);\
+	if (pfn == nullptr)\
+		cout << \'93There are no negative values in the array\'94 << endl;\
+	else\
+	\{\
+		cout << \'93The first negative value is \'93 << *pfn << endl;\
+		cout << \'93It\'92s at element number \'93 << pfn - da << endl;\
+	\}\
+\}\
+\
+\
+examples of nullptr:\
+int* p = nullptr;\
+p = nullptr;\
+if (p == nullptr)\
+if (p != nullptr)\
+}

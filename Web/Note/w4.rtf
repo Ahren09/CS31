@@ -1,0 +1,237 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;\red251\green2\blue7;\red0\green0\blue0;
+}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;\cssrgb\c100000\c14913\c0;\cssrgb\c0\c0\c0;
+}
+\margl1440\margr1440\vieww14860\viewh9680\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 4, monday\
+april 23, 2018
+\f1\b0 \
+\
+string s = \'93Hello\'94;\
+for (int k = 0; k < s.size(); k++)\
+	cout << s[k] << endl;\
+\
+H e l l o\
+0 1 2 3 4\
+if s[7] or s[-1] ==> undefined behavior\
+\
+// count the number of o\'92s\
+cout << \'93Enter some text: \'93;\
+string t;\
+getline(cin, t);\
+int count = 0;\
+\
+for (int k = 0; k < s.size(); k++)\
+	if (t[k] == \'91o\'92 || t[k] == \'91O\'92)\
+		count++;\
+cout << \'93The number of o\'92s (upper and lower case) is \'93 << count << endl;\
+\
+\
+string s = \'93Hello\'94; // s is a string; \'93Hello\'94 is a 
+\f2\i string literal 
+\f1\i0 \
+char c = s[1];		// c is a char (initialized to lower case e)\
+char c = \'93x\'94 \cf3 // Error! Won\'92t compile!\cf4 \
+string s = \'91x\'92; \cf3 // Error! Won\'92t compile!\cf4 \
+\
+\
+cout << \'93Enter a phone number: \'93;\
+string num;\
+getline(cin, num);\
+\
+ex:\
+(310) 825-4521\
+01234567890123\
+\
+int count = 0;\
+for (int k = 0; k < num.size(); k++)\
+	if (isdigit(s[k]))\
+		count++;\
+\
+if (count != 10)\
+	cout << \'93A phone number must have 10 digits.\'94 << endl;\
+\
+\
+\
+isdigit(c) // check if any number\
+islower(c) // check if lower case letter\
+isupper(c) // check if upper case letter\
+isalpha(c) // check if any letter\
+\
+\
+\
+if (x >= 1 && x <= 10)\
+\
+opposite:\
+if (x < 1 || x > 10)\
+if (!(x >= 1 && x <= 10))\
+\
+\
+\
+// Capitalize string letters\
+\
+string s;\
+getline(cin, s);\
+\
+if (s != \'93\'94) // or if (s.size() > 0)\
+	s[0] = toupper(s[0]);\
+\
+\
+s[0] = toupper(s[0]);\
+char c = toupper(s[0]);\
+\
+check if either O or o:\
+\
+if (toupper(t[k]) == \'91O\'92)\
+	count++;\
+\
+\
+mistakes:\
+string s = \'93mary\'94;\
+toupper(s); \cf3 // Error! Won\'92t compile! Only use with a character.\cf4 \
+s = toupper(s); \cf3 // Error! Won\'92t compile!\cf4 \
+toupper(s[0]); \cf3 // Mistake: doesn\'92t do anything useful\cf4 \
+\
+\
+\
+\
+void greet()\
+\{\
+	for (int k = 0; k < 3; k++)\
+		cout << \'93Hello\'94 << endl;\
+\}\
+\
+int main()\
+\{\
+	greet();\
+	greet();\
+	greet();\
+\}\
+\
+\
+void greet(int n, string msg)\
+\{\
+	for (int k = 0; k < n; k++)\
+		cout << msg << endl;\
+\}\
+\
+string m;\
+getline(cin, m);\
+if (m != \'93\'94)\
+	m[0] = toupper(m[0]);\
+greet(2, m);\
+\
+\
+\
+
+\f0\b \cf2 week 4, wednesday\
+april 25, 2018\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 void greet(int n, string msg); \cf4 // \'93function prototype\'94, HAS SEMICOLON, for when function to be called in int main() is after \
+\
+int main()\
+\{\
+	...\
+	...\
+	greet(\'93Hello\'94, 3); // Error! Won\'92t compile!\
+	...\
+	...\
+	int a = 4;\
+	int b;\
+	cin >> b; // Suppose the user typed 2\
+	greet(a+3*b, \'93Ni hao\'94);\
+	cin.ignore(10000, \'91\\n\'92);\
+	...\
+	...\
+	...\
+	string m;\
+	getline(cin, m); // Suppose the user typed salaam\
+	if (m!= \'93\'94)\
+		m[0] = toupper(m[0]);\
+	greet(2,m);\
+	...\
+	...
+\f0\b \cf2 \
+\}\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf4 void greet(int n, string msg) \
+\{\
+	for (int k = 0; k < n; k++)\
+		cout << msg << endl;\
+\}
+\f0\b \cf2 \
+\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 int square(int n)\
+\{\
+	if (n > 100)\
+		return; // WON\'92T COMPILE, need to return an int\
+	return n*n;\
+\}\
+\
+int cube(int n)\
+\{\
+	return n * square(n);\
+\}\
+\
+returnType name(parameters)\
+\{\
+	body of function;\
+\}\
+\
+\
+double hypotenuse(double leg1, double leg2)\
+\{\
+	return sqrt(leg1 * leg1 + leg2 * leg2);\
+\}\
+\
+\
+void greet(int n, string msg)\
+\{\
+	if (n < 0)\
+	\{\
+		cout << \'93I can\'92t greet you a negative number of times\'94 << endl;\
+		return; // ends function immediately\
+		// return 42; is a COMPILE ERROR because void\
+	\}\
+	for (int k = 0; k < n; k++)\
+		cout << msg << endl;\
+		// return; could have this\
+\}
+\f0\b \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f1\b0 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf4 \
+\
+\
+}

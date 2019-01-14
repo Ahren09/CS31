@@ -1,0 +1,232 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww10280\viewh11120\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 6, monday\
+may 7, 2018
+\f1\b0 \
+\
+if (nScores == 0)\
+	cout << \'93There were no scores, so no average\'94 << endl;\
+else\
+\{\
+	double mean = static_cast<double>(total)/nScores;\
+	cout << \'93The average of all the scores is \'93 << mean << endl;\
+	double sumOfSquares = 0;\
+	for (int k = 0; k < nScores; k++)\
+	\{\
+		double diff = scores[k] - mean;\
+		sumOfSquares += diff * diff;\
+	\}\
+	cout << \'93The std. deviation is \'93 << sqrt(sumOfSquares / nScores) << endl;\
+\}\
+\
+// undefined behavior: selecting value in array that is not there\
+\
+\
+int main()\
+\{\
+	int scores[10000];\
+	int nScores = 9;\
+	... // fill up the array, perhaps partially, setting nScores to the number of interesting items\
+	//double n = computeMean(scores);\
+	//\'85\
+	//int stuff[100];\
+	//\'85 // fill in all 100 elements\
+	//double n2 = computeMean(stuff); // NOT RIGHT\
+	\
+	double n = computeMean(scores, nScores);\
+	int stuff[100];\
+	double n2 = computeMean(stuff, 100);\
+	setAll(stuff, 10, 42);\
+\}\
+\
+double computeMean(int a[], int n)\
+\{\
+	int total = 0;\
+	for (int k = 0; k < n; k++)\
+		total += a[k];\
+	setAll(a, n, 0); // ERROR! WON\'92T COMPILE! would set array to 0 but won\'92t compile because computeMean isn\'92t supposed to modify anything\
+	return static_cast<double>(total) / n;\
+\}\
+\
+// when passing array to a function, it is not copied (passing by reference)\
+\
+void setAll(int a[], int n, int value)\
+\{\
+	for (int k = 0; k < n; k++)\
+		a[k] = value;\
+\}\
+\
+\
+\
+2D array\
+const int WEEKS = 5;\
+const int NDAYS = 7;\
+int attendance [WEEKS][NDAYS]; // rows, columns\
+attendance[2][5] = 140;\
+\
+\
+for (int w - 0; w < NWEEKS; w++)\
+\{\
+	int t = 0;\
+	for (int d = 0; d < NDAYS; d++)\
+		t = attendance[w][d];\
+	cout << \'93The total for week \'93 << w << \'93 is \'93 << t << endl;\
+\}\
+\
+const string dayNames[NDAYS] = \{\
+	\'93Monday\'94, \'93Tuesday\'94, \'93Wednesday\'94, \'93Thursday\'94, \'93Friday\'94,\
+	\'93Saturday\'94, \'93Sunday\'94\
+\};\
+\
+int grandTotal = 0;\
+for (int d = 4; d < NDAYS; d++)\
+\{\
+	int t = 0;\
+	for (int w = 0; w < WEEKS; w++)\
+		t += attendance[w][d];\
+	cout << \'93The total for \'93 << dayName[d] << \'93 is \'93 << t << endl;\
+	grandTotal += 1;\
+\}\
+cout << \'93Over the course of \'93 << WEEKS << \'93weeks, weekend attendance was \'93 << grandTotal << endl;\
+\
+\
+int blah[3][4] = \{\
+	\{10, 20, 30, 40\},\
+	\{50, 60, 70, 80\},\
+	\{90, 100, 110, 120\}\
+\}; // initializing 2 D array\
+\
+\
+int multiplexAttendance[16][5][7];\
+\
+\
+\
+\
+\
+
+\f0\b week 6, wednesday\
+may 9, 2018\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 C++ strings:\
+\
+#include <string>\
+using namespace std;\
+\
+string t = \'93Hello\'94;\
+string s; // empty string\
+\
+for (int k = 0; k != t.size(); k++)\
+	cout << t[k] << endl;\
+\
+cout << t;\
+getline(cin, s);\
+\
+s = t; // sets s to Hello\
+\
+s += \'93!!!\'94; // sets s to Hello!!!\
+\
+if (t < s)\
+\
+\
+\
+c strings:\
+\
+char t[10] = \'93Hello\'94;\
+char t[10] = \{\'91H\'92, \'91e\'92, \'91l\'92, \'91l\'92, \'91o\'92\};\
+\
+0 is a marker character, marks end of string, signaled by double quote: \'93\\0\'94 aka 
+\f0\b zero byte
+\f1\b0 /null character/null byte/NUL\
+\
+char s[100] = \'93\'94; // empty string\
+char s[100] = \{\'91\\0\'92\};\
+\
+for (int k = 0; t[k] != \'91\\0\'92; k++)\
+	cout << t[k] << endl;\
+\
+cout << t; // writes the location in memory of t\
+cin.getline(s, 100); // This form requires s to be a C string (i.e., an array of char);\
+					 // the second argument is declared the size of the array
+\f0\b \
+\
+
+\f1\b0 char ca[3] = \'93AB\'94;\
+0	 1	  2\
+\'91A\'92	\'91B\'92	\'91\\0\'92\
+ca[2] = \'91C\'92; // valid, but no longer a valid C string because no zero byte marking end of string\
+cout << ca; // UNDEFINED BEHAVIOR!! will write out all characters up to zero byte aka ABC but doesn\'92t know to stop\
+\
+\
+cout << strlen(t); // writes 5\
+\
+c++ string x 	x.size()\
+c string   x	strlen(x)\
+vice versa = won\'92t compile\
+\
+s = t; // Error! Won\'92t compile! You cannot assign arrays!\
+instead:\
+strcpy(s, t); // strcpy(destination, source); and destination array must be big enough to hold all elements from source array (including zero byte!!!!!) otherwise UNDEFINED BEHAVIOR
+\f0\b \
+\
+
+\f1\b0 strcat(s, \'93!!!\'94) // appends !!! to s, possible undefined behavior, same as ^^\
+\
+compile errors = using c++ operators on c strings (aka +)\
+\
+strcmp(a, b)\
+	negative	if a comes before b\
+	0			if a equals b\
+	positive	if b comes before a\
+\
+check if a is equal to b\
+WRONG:\
+if (strcmp(a, b)) // will give 0, which it sees as false\
+RIGHT:\
+if (strcmp(a, b) == 0)\
+\
+check if a comes before b\
+WRONG:\
+if (a < b) // will compile for c strings, but doesn\'92t do what you want!\
+RIGHT\
+if (strcmp(a, b) < 0)
+\f0\b \
+\
+\
+
+\f1\b0 void makeUpperCase(string& s)\
+	for (int k = 0; k != s.size; k++)\
+		s[k] = toupper(s[k]);\
+\
+void makeUpperCase(char s[])\
+	for (int k = 0; k != \'91\\0\'92; k++) // k != strlen(s) is too much work\
+		s[k] = toupper(s[k]);
+\f0\b \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f1\b0 \
+\
+\
+\
+\
+}

@@ -1,0 +1,370 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww11780\viewh11500\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 10, monday\
+june 4, 2018
+\f1\b0 \
+\
+\
+class Toy\
+\{\
+	. . .\
+\};\
+\
+class Pet\
+\{\
+	public:\
+	 Pet(string nm, int h);\
+	 ~Pet();\
+	 string name() const;\
+	 void addToy();\
+	 ...\
+	private:\
+	 string m_name;\
+	 int m_health;\
+	 Toy* m_favoriteToy; // if a pet may or may not have a toy, make it a \
+						  // pointer and if it doesn\'92t have one then \
+						  // nullptr\
+\};\
+\
+Pet::Pet(string nm, int h)\
+\{\
+	m_name = nm;\
+	m_health = h;\
+	m_favoriteToy = nullptr;\
+\}\
+\
+Pet::~Pet()\
+\{\
+	delete m_favoriteToy;\
+\};\
+\
+string Pet::name() const\
+\{\
+	return m_name;\
+\}\
+\
+void Pet::addToy()\
+\{\
+	delete m_favoriteToy; 	// ok for the first toy because deleting a \
+							// nullptr does nothing\
+	m_favoriteToy = new Toy;\
+\}\
+\
+If you declare no constructors at all, the compiler writes a default constructor for you that leaves members of a builtin type uninitialized, and default-constructs members of a class type.\
+\
+\'93default constructor\'94 == \'93zero-argument constructor\'94\
+\
+void g()\
+\{\
+	Pet p(\'93Fido\'94, 10);\
+	p.addToy();\
+	. . .\
+	p.addToy();\
+	Pet p2; 	// does not compile, compiler does not write a default constructor for me because I already wrote a different constructor!\
+\}\
+\
+\
+SIDE NOTE:\
+String is actually a class and its default constructor initializes a string to an empty string\
+\
+class string\
+\{\
+	string();\
+	string(const char text[]);\
+	. . .\
+\};\
+\
+string t; // empty string, no parenthesis!!\
+string r(); // DOES NOT DECLARE A STRING! R IS A FUNCTION!\
+string s(\'93Hello\'94); // creates a string with h e l l o as its characters\
+\
+\
+\
+A named local variable lives \'93on the stack\'94 and goes away when you leave its cage.\
+A dynamically allocated object (Created using the key word new) lives \'93on the heap\'94 and goes away only when the key word delete is used with a pointed to the dynamically allocated object.\
+A variable declared outside of any function lives in the \'93global/static storage area\'94 and exists for the lifetime of the program.\
+\
+\
+\
+\
+class Company; 	// Announce that Company is the name of a type\
+\
+class Employee\
+\{\
+	public:\
+	 Employee(string nm, double sal, int ag, Company* c);\
+	 void receiveBonus();\
+	private:\
+	 string m_name;\
+	 double m_salary;\
+	 int m_age;\
+	 Company* m_company;\
+\};\
+\
+Employee::Employee(string nm, double sal, int ag, Company* c)\
+\{\
+	m_name = nm;\
+	m_salary = sal;\
+	m_age = ag;\
+	m_company = c;\
+\}\
+\
+void Employee::receiveBonus()\
+\{\
+	cout << \'93Pay to the order of \'93\'94 << m_name << \'93 the amount $\'94 << (m_salary * m_company->bonusRate()) << endl;\
+\}\
+\
+class Company 	\
+\{\
+	public:\
+	 Company();\
+	 void hire(string nm, double sal, int ag);\
+	 void setBonusRate(double pct);\
+	 void giveBonuses();\
+	 double bonusRate() const;\
+	private:\
+	 Employee* m_employees[100];\
+	 int m_nEmployees;\
+	 double m_bonusRate;\
+\};\
+\
+Company::Company()\
+\{\
+	m_nEmployees = 0;\
+	m_bonusRate = 0;\
+\}\
+\
+Company::hire(string nm, double sal, int ag)\
+\{\
+	m_employees[m_nEmployees] = new Employee(nm, sal, age, this); //!!!!\
+	m_nEmployees++;\
+\}\
+\
+Company::setBonusRate(double pct)\
+\{\
+	m_bonusRate = pct;\
+\}\
+\
+Company::giveBonuses()\
+\{\
+	for (int i = 0; i < m_nEmployees; i++)\
+		m_employees[i]->receiveBonus(); \
+\}\
+\
+Company::bonusRate()\
+\{\
+	return m_bonusRate;\
+\}\
+\
+\
+int main()\
+\{\
+	Company myCompany;\
+	myCompany.hire(\'93Ricky\'94, 80000, 40);\
+	myCompany.hire(\'93Lucy\'94, 40000, 35);\
+	Company yourCompany;\
+	yourCompany.hire(\'93Fred\'94, 30000, 51);\
+	myCompany.setBonusRate(0.02);	\
+	myCompany.giveBonuses();\
+\}\
+\
+\
+\
+\
+\
+
+\f0\b week 10, wednesday\
+june 6, 2018
+\f1\b0 \
+\
+\
+Pointers:\
+	Another way to implement passing by reference\
+	Traverse arrays\
+	Manipulate dynamic storage\
+	Represent relationships in data structures\
+\
+\
+class Rock\
+\{\
+	. . .\
+	double weight() const;\
+	. . .\
+\};\
+\
+class Fan\
+\{\
+	. . .\
+	void turnOn();\
+	. . .\
+\};\
+\
+class Robot\
+\{\
+	. . .\
+	void blah();\
+	. . .\
+	Fan m_cooler;	// every robot carries a fan\
+	Rock* m_rock;	// not every robot is carrying a rock, can use nullptr\
+\};\
+\
+void Robot::blah()\
+\{\
+	. . .\
+	if (m_rock != nullptr && m_rock->weight() > 50)	// use -> because 																	// m_rock is a pointer\
+		m_cooler.turnOn();		// use . because m_cooler is part of Fan\
+	. . .\
+\}\
+\
+\
+\
+\
+class Complex\
+\{\
+	public:\
+	 Complex(double re, double im);\
+	 Complex();\
+	 double real() const;\
+	 double imag() const;\
+	. . .\
+	private:\
+	 double m_real;\
+	 double m_imag;\
+\};\
+\
+Complex::Complex(double re, double im)\
+\{\
+	m_real = re;\
+	m_imag = im;\
+\}\
+\
+Complex::Complex()\
+\{\
+	m_real = 0;\
+	m_imag = 0;\
+\}\
+\
+// Overloading: You can overload a function name as long as the functions differ in the number or types of the parameters.\
+\
+double Complex::real() const\
+\{\
+	return m_real;\
+\}\
+\
+double Complex::imag() const\
+\{ \
+	return m_imag;\
+\}\
+\
+int main()\
+\{\
+	Complex c(4, -3);	// 4 + 3i\
+	cout << c.real();\
+	Complex d; 			// will not compile, no default constructor\
+\}\
+\
+\
+\
+\
+Overloading:\
+string s2(\'93Hello\'94);\
+string s3(10, \'91*\'92);		// integer and character\
+char ca[100] = \'93catfish\'94;\
+string s4(ca + 1, ca + 4); 		// \'93atf\'94\
+\
+\
+\
+\
+\
+class Rectangle\
+\{\
+	. . .\
+\};\
+\
+class Circle\
+\{\
+	. . .\
+\};\
+\
+void draw(Rectangle x)\
+\{\
+	. . .\
+\}\
+\
+void draw(Circle x)\
+\{\
+	. . .\
+\}\
+\
+int main()\
+\{\
+	Circle c;\
+	Rectangle r;\
+	draw(c);\
+	draw(r);\
+	. . .\
+\}\
+\
+\
+\
+\
+\
+class Complex\
+\{\
+	public:\
+	 Complex(double re, double im);\
+	 Complex();\
+	 double real() const;\
+	 double imag() const;\
+	. . .\
+	private:\
+	 double m_rho;\
+	 double m_theta;\
+\};\
+\
+Complex::Complex(double re, double im)\
+\{\
+	m_rho = sqrt(re*re + im*im);\
+	m_theta = atan(im, re);\
+\}\
+\
+Complex::Complex()\
+\{\
+	m_rho = 0;\
+	m_theta = ;\
+\}\
+\
+double Complex::real() const\
+\{\
+	return m_rho * cos(m_theta);\
+\}\
+\
+double Complex::imag() const\
+\{ \
+	return m_rho * sin(m_theta);\
+\}\
+\
+\
+// VISIBLE BEHAVIOR DOESN\'92T CHANGE\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

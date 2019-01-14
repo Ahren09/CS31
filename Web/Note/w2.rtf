@@ -1,0 +1,385 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww17760\viewh9980\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 2, monday\
+april 9, 2018
+\f1\b0 \
+\
+cake recipe (in English) ==> English to Chinese translator robot ==> cooking robot (in Chinese) + ingredients ==> yummy cake\
+\
+beat 3 eggs into a mixing bowl\
+\
+into eggs mixing beat 3 bowl a		//compilation error / syntax error\
+\
+beat 333 eggs into a mixing bowl	//run time error / logic error\
+\
+\
+\
+\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 \ul \ulc2 ex: \'93Hello\'94\ulnone \
+\
+#include <iostream>\
+using namespace std;\
+\
+int main()\
+\{\
+	cout << \'93Hello\'94 << endl;\
+\}\
+\
+\
+\
+\
+\
+How many hours did you work? 
+\f2\i 40\
+
+\f1\i0 What is your hourly rate of pay? 
+\f2\i 16.13\
+
+\f1\i0 You earned $645.20\
+$64.52 will be withheld.\
+\
+\
+======================================\
+\
+\
+#include <iostream>\
+using namespace std;\
+\
+int main()\
+\{\
+	cout << \'93How many hours did you work? \'94;\
+	double hoursWorked;\
+	cin >> hoursWorked;\
+\
+	// cout << \'93Hrs worked: \'93 << hoursWorked << endl;\
+\
+	cout << \'93What is your hourly rate of pay? \'94;\
+	double payRate;\
+	cin >> payRate;\
+\
+	double amtEarned = hoursWorked * payRate\
+\
+	cout.setf(ios::fixed);\
+	cout.precision(2);\
+	cout << \'93You earned $\'94 << amtEarned << endl;\
+	cout << \'93$\'94 << (amtEarned * .10) << \'93 will be withheld.\'94 << endl;\
+\}\
+\
+prints:\
+How many hours did you work? 
+\f2\i 40 
+\f1\i0 \
+// Hrs worked: 40\
+What is your hourly rate of pay? 
+\f2\i 16.13\
+
+\f1\i0 You earned $645.20\
+$64.52 will be withheld.\
+\
+\
+\
+\
+\
+\
+declaration: type identifier;\
+types: int, double\
+	int: -2 billion to 2 billion\
+	double: +/- 10^-308 to 10^308 (about 15 or 16 significant digits)\
+identifier: letter + letter/digit/_\
+	ex: hours_worked, hoursWorked, HoursWorked, income2017\
+		not: hoursworked\
+\
+\
+\
+\
+\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 week 2, wednesday\
+april 11, 2018\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 mathematical operations: + - * /\
+e.g.	27 / 3 * 3 = 27\
+		3 + 4 * 5 = 23\
+		(3 + 4) * 5 = 35\
+if at least one number has a decimal point = answer is a double\
+if at least one doesn\'92t have a decimal point = int\
+e.g.	14.3 / 5.0 = 2.86\
+		14.3 / 5 = 2.86\
+		14 / 5.0 = 2.86\
+		14 / 5 = 2 // drops fractional part, doesn\'92t round\
+		14 % 5 = 4 // modulus or remainder\
+e.g.	double x = 3.1 + 14 / 5;\
+		double x = 3.1 + 2;\
+		double x = 5.1;\
+e.g.	double y = 14 / 5;\
+		double y = 2;\
+\
+\
+\
+\
+\
+initialization:\
+int a = 10;\
+int b = a * a;\
+int c = 25 / (b - 100); // \'93undefined behavior\'94 bc dividing by 0\
+// possible: program will crash\
+\
+double d;\
+double e = 2 * d; // \'93undefined behavior\'94 bc using value of uninitialized behavior\
+cout << e; \
+\
+int f = 1000;\
+int g = f * f * f; \
+int h = f * g; // 1 trillion is too big to fit into int, exceeds largest possible value it can store, max is 1 billion\
+\
+\
+\
+\
+\
+characters:\
+\
+What is your name? 
+\f2\i Sir Robin\
+
+\f1\i0 How old are you? 
+\f2\i 32\
+
+\f1\i0 What is your quest? 
+\f2\i To seek the Holy Grail
+\f1\i0 \
+Hello, brave Sir Robin!\
+You want To seek the Holy Grail\
+If you live, next year you will be 33\
+\
+=============================================\
+\
+#include <iostream>\
+#include <string>\
+using namespace std;\
+\
+int main()\
+\{\
+	cout << \'93What is your name? \'93;\
+	string personsName;\
+	getline(cin, personsName);\
+	// cin >> personsName; would only take one word, no spaces, only would get Sir\
+\
+	cout << \'93How old are you? \'93;\
+	int age;\
+	cin >> age;\
+\
+	cout << \'93What is your quest? \'93;\
+	string quest;\
+	getline(cin, quest);\
+\
+	cout << \'93Hello, brave \'93 << personsName << \'93!\'94 << endl;\
+	cout << \'93You want \'93 << quest << endl;\
+	cout << \'93If you live, next year you will be \'93 << (age + 1) << endl;\
+\}\
+\
+\ul PROBLEM output:\ulnone \
+What is your name? 
+\f2\i Sir Robin\
+
+\f1\i0 How old are you? 
+\f2\i 32\
+
+\f1\i0 What is your quest? Hello, brave Sir Robin! //problem\
+You want\
+If you live, next year you will be 33\
+\
+\ul WHY:\ulnone \
+If you need an input of a number and then a string using getline, need something inbetween to fix this problem.\
+int a;				written to screen	what OS holds	available to program	action\
+cin >> a;																		wait until characters delivered\
+You type 3			3\
+You type 5			5					35\
+You type backspace	BSspaceBS			3\
+You type 32			2					32\
+You type Enter		C_RL_F								32newline				Consume 3 and 2, sets a to 32\
+\
+// C_R is character return and L_F is line fielding\
+\
+string s;			written to screen	what OS holds	available to program	action\
+getline(cin, s);										newline					consume newline, stores empty string in S\
+\
+the getline function immediately receives the newline not consumed in the int part and stored the empty string in quest so we have no output for quest\
+\
+\ul SOLUTION:\ulnone \
+#include <iostream>\
+#include <string>\
+using namespace std;\
+\
+int main()\
+\{\
+	cout << \'93What is your name? \'93;\
+	string personsName;\
+	getline(cin, personsName);\
+	// cin >> personsName; would only take one word, no spaces, only would get Sir\
+\
+	cout << \'93How old are you? \'93;\
+	int age;\
+	cin >> age;\
+	cin.ignore(10000, \'91\\n\'92);	// Throw away the rest of the line\
+\
+	cout << \'93What is your quest? \'93;\
+	string quest;\
+	getline(cin, quest);\
+\
+	cout << \'93Hello, brave \'93 << personsName << \'93!\'94 << endl;\
+	cout << \'93You want \'93 << quest << endl;\
+	cout << \'93If you live, next year you will be \'93 << (age + 1) << endl;\
+\} \
+\
+\ul NOW: \
+\ulnone cin.ignore(10000, \'91\\n\'92)		written to screen	what OS holds	available to program	action\
+string s;										\
+getline(cin, s);																		wait for user input\
+\
+
+\f2\i If you read a number using cin >> _____\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 \ul and \ulnone the next thing you read is a string using getline(cin, ____)\
+then say 	cin >> ____;\
+			cin.ignore(10000, \'92\\n\'92);
+\f1\i0 \
+\
+\
+\
+\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 week 2, friday\
+april 13, 2018\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b0 \cf2 If you read a number\
+	cin >> _____; // int or double variable\
+and the next thing you read is a string using getline\
+	getline(cin, _____); // string variable\
+Then say\
+	cin >> _____\'92 //int or double variable\
+	cin.ignore(10000, \'91\\n\'92);
+\f0\b \
+
+\f1\b0 \
+\
+\
+\
+\
+if (condition)\
+	statement_T\
+else\
+	statement_F\
+\
+\
+int main()\
+\{\
+	cout << \'93How many hours did you work? \'94;\
+	double hoursWorked;\
+	cin >> hoursWorked;\
+\
+	// cout << \'93Hrs worked: \'93 << hoursWorked << endl;\
+\
+	cout << \'93What is your hourly rate of pay? \'94;\
+	double payRate;\
+	cin >> payRate;\
+\
+	double amtEarned = hoursWorked * payRate;\
+\
+	cout.setf(ios::fixed);\
+	cout.precision(2);\
+	cout << \'93You earned $\'94 << amtEarned << endl;\
+	if (payRate >= 14.00)\
+		cout << \'93$\'94 << (amtEarned * .10) << \'93 will be withheld.\'94 << endl;\
+	else\
+		cout << \'93$\'94 << (amtEarned * .05) << \'93 will be withheld.\'94 << endl;\
+\}\
+\
+logic operators:\
+>		<		==\
+>=		<=		!=\
+any errors are called boundary errors\
+\
+\
+\
+\
+\
+if (x >= 0)\
+	cout << x;\
+	cout << ____;\
+else\
+	cout << -x;\
+\
+for this case, >= or > yield the same answers\
+\
+compound statement \'93block\'94\
+\{stat; stat; stat;\}\
+\
+\
+\
+\
+\
+cout << \'93What is your name? \'93;\
+string name;\
+getline(cin, name);\
+if (name == \'93\'94)\
+	cout << \'93You didn\'92t enter a name!\'94 << endl;\
+else\
+	cout << \'93Hello, \'94 << name << endl;\
+\
+\
+\
+double withholdingRate;\
+\
+if (payRate >= 14.00)\
+	//double withholdingRate = 0.10; // Wrong! Can only use any variable declared here in the statement\
+	withholdingRate = 0.10;\
+else\
+	//double withholdingRate = 0.05;\
+	withholdingRate = 0.05;\
+cout << \'93$\'94 << (withholdingRate * amtEarned) << \'93 will be withheld.\'94 << endl;\
+\
+or\
+\
+double withholdingRate = 0.10;\
+if (payRate < 14.00)\
+	withholdingRate = 0.05;\
+\
+\
+\
+\
+\
+declaration\
+type identifier;\
+type identifier = expression;\
+\
+assignment statement\
+variable = expression;\
+\
+\
+\
+\
+\
+\
+}

@@ -1,0 +1,252 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww12560\viewh11280\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 8, wednesday\
+may 23, 2018
+\f1\b0 \
+\
+struct Employee\
+\{\
+	string name;\
+	double salary;\
+	int age; // these merely say what it means to be an employee\
+\}; // requires semi-colon or else weird error messages, DO NOT FORGET!!!!\
+\
+int main()\
+\{\
+	int k;\
+	Employee e1;\
+	Employee e2; // contains a string for name, double for salary, int for age\
+	e1.name = \'93Fred\'94;\
+	e1.salary = 50000;\
+	e1.age = 51;\
+\
+	e1.age++;\
+\
+	cout << \'93Enter a name: \'93;\
+	getline(cin, e2.name);\
+	e2.salary = 60000;\
+\
+	// Employee.name = \'93Lucy\'94; // ERROR! need to pick an object like e1 or e2\
+\
+	Employee company[100];\
+	company[2].name = \'93Ricky\'94;\
+\
+	for (int k = 0; k != company[2].name.size(); k++)\
+		cout << company[2].name[k] << endl;\
+\}\
+\
+\
+int main()\
+\{\
+	Employee company[100];\
+	int nEmployees = 0;\
+		// read in some info, fill up some of the array, set nEmployees\
+	...\
+	printPayCheck(company[2]);\
+	celebrateBirthday(&company[1]);\
+\}\
+\
+void printPaycheck(Employee e)\
+\{\
+	cout << \'93Pay to the order of \'93 << e.name << \'93 the amount $\'94 << e.salary/12 << endl;\
+\}\
+\
+void celebrateBirthday(Employee* ep)\
+\{\
+	*(ep.age)++; // won\'92t compile\
+	(*ep).age++; // ok\
+	ep->age++; // same as ^ but better\
+\}\
+\
+\
+\
+\
+
+\f0\b week 8, friday\
+may 25, 2018
+\f1\b0 \
+\
+struct Employee\
+\{\
+	string name;\
+	double salary;\
+	int age;\
+\};\
+\
+void printPaycheck(const Employee& e);\
+void celebrateBirthday(Employee* ep);\
+double totalPayroll(const Employee emps[], int n);\
+\
+int main()\
+\{\
+	Employee company[100];\
+	int nEmployees = 0;\
+		...read in some info, fill array, set nEmployees ...\
+	printPaycheck(company[2]);\
+	celebrateBirthday(&company[1]);\
+	cout << totalPayroll(company, nEmployees) << endl;\
+\}\
+\
+void printPaycheck(const Employee& e)\
+\{\
+	cout << \'93Pay to the order of \'93 << e.name\
+		 << \'93 the amount $\'94 << e.salary/12 << endl;\
+\}\
+\
+void celebrateBirthday(Employee* ep)\
+\{\
+	ep->age++; // same as (*ep).age, increments age of employee pointer is pointing at\
+\}\
+\
+double TotalPayroll(const Employee emps[], int n)\
+\{\
+	double total = 0;\
+	for (int k = 0; k < n; k++)\
+		total += emps[k].salary;\
+	return total;\
+\}\
+\
+\
+an object of		the name of\
+ some struct   .   a member of\
+   type				that type\
+\
+\
+EQUIVALENT:\
+emps[k].salary\
+(*(emps + k)).salary\
+(emps + k)-> salary\
+\
+(*ep).age++\
+ep->age++\
+\
+#include <string>\
+class string\
+\{\
+	\'85\
+\}\
+\
+struct Target 	// object, struct is public by default, because this is public, you can create a Target t and call t.pos, compile error if class\
+\{\
+	void init(); 	// member function\
+	void move(char dir);\
+	void replayHistory();\
+\
+		// Invariant:\
+		//		history consists only of Rs and Ls\
+		//		pos == number of Rs in history minus number of Ls in history\
+	int pos;\
+	string history;\
+	Target* subTarget;\
+\};\
+\
+Equivalent to\
+\
+class Target\
+\{\
+public:\
+	\'85\
+\};\
+\
+// int a;\
+// Target t;\
+// t.init(); <\'97 this points to t\
+// OR\
+// t.pos = 0;\
+// t.history = \'93\'94;\
+// cout << t.pos << endl; // 0\
+// t.pos += 2;\
+// cout << t.pos << endl; // 2\
+\
+void Target::init()\
+\{\
+	this->pos = 0; // same as pos = 0;\
+	this->history = \'93\'94; // same as history = \'93\'94;\
+	// pos = 0;\
+	// history = \'93\'94;\
+	// self = this; // this is a pointer to the object that you called init() on\
+\}\
+\
+// this can only be used inside member function, a pointer to the object you called your function on\
+\
+void Target::replayHistory()\
+\{\
+	for (int k = 0; k != this->history.size(); k++) // this-> is optional\
+		cout << history[k] << endl;\
+\}\
+\
+bool Target::move(char dir)\
+\{\
+	switch(dir)\
+	\{\
+		case \'91R\'92:\
+		case \'91r\'92:\
+			pos++;\
+			break;\
+		case \'91L\'92:\
+		case \'91l\'92:\
+			pos--;\
+			break;\
+		default:\
+			return false;\
+	\}\
+	history += toupper(dir);\
+	return true;\
+\}\
+\
+int main()\
+\{\
+	Target t;\
+	t.pos = 0;\
+\
+	t.pos++;\
+	t.history += \'91R\'92;\
+	\
+	Target t2;\
+	t2.pos = 0;\
+\
+	t2.pos\'97;\
+	t2.history += \'91K\'92;\
+\
+///////////////////////\
+\
+	Target t;\
+	t.init();\
+	\
+	t.move(\'91R\'92);\
+\
+	Target t2;\
+	t2.init();\
+\
+	char ch;\
+	cin >> ch;\
+	if (! t2.move(ch))\
+		...error...\
+\
+	t2.pos--; // WON\'92T COMPILE! Not inside member function of target, this function has no access to private members of target\
+\}\
+\
+\
+a pointer to			the name of\
+an object of     ->    a member of			p->m means(*p).m\
+ some struct			that type\
+	type				\
+\
+the name of				the name of\
+some struct     ::     a member of\
+  type					that type\
+\
+\
+\
+}

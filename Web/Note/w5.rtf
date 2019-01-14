@@ -1,0 +1,261 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier-Bold;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;}
+\margl1440\margr1440\vieww10840\viewh11420\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs26 \cf2 CS 31 
+\f1\b0\fs24 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf2 \
+week 5, monday\
+april 30, 2018
+\f1\b0 \
+\
+Enter a phone number: (310) 825-4321\
+The digits in the number are 3108254321\
+\
+#include <iostream>\
+#include <string>\
+#include <cctype> // for islower, isupper, isdigit, etc\
+using namespace std;\
+\
+bool isValidPhoneNumber(string pn); // prototype\
+string digitsOf(string pn);\
+\
+int main()\
+\{\
+	cout << \'93Enter a phone number: \'93;\
+	string phone;\
+	getline(cin, phone);\
+	if (isValidPhoneNumber(phone))\
+		cout << \'93The digits in the number are \'93 << digitsOf(phone) << endl;\
+	else\
+		cout << \'93A phone number must have 10 digits.\'94 << endl;\
+\}\
+\
+bool isValidPhoneNumber(string pn)\
+\{\
+	int numberOfDigits = 0;\
+	for (int k = 0; k != pn.size(); k++)\
+	\{\
+		if (isdigit(pn[k]))\
+			numberOfDigits++;\
+	\}\
+	if (numberOfDigits == 10)\
+		return true;\
+	else\
+		return false;\
+\}\
+\
+string digitsOf(string pn)\
+\{\
+	string digitsOnly = \'93\'94;\
+	for (int i = 0; i < pn.size(); i++)\
+	\{\
+		if (isdigit(pn[i]))\
+			digitsOnly += pn[i];\
+	\}\
+	return digitsOnly;\
+\}\
+\
+\
+\
+void polarToCartesian(double rho, double theta, double xx, double yy) //WRONG\
+\{\
+	xx = rho * cos(theta);\
+	yy = rho * sin(theta);\
+\}\
+\
+void polarToCartesian(double rho, double theta, double& xx, double& yy) //RIGHT\
+\{\
+	xx = rho * cos(theta);\
+	yy = rho * sin(theta);\
+\}\
+\
+// A reference is another name for an already existing object\
+\
+\
+int main()\
+\{\
+	double r;\
+	double angle;\
+	...\
+	double x;\
+	double y;\
+	polarToCartesian(r, angle, x, y);\
+	...\
+	double x2;\
+	polarToCartesian(2*r, angle, x2, y);\
+	...\
+\}\
+\
+\
+// rho and theta are \'93passed by value\'94 ==> copied\
+// xx/yy is \'93passed by reference\'94 ==> it\'92s another name for an already existing object\
+\
+\
+void exchange(int& x, int& y)\
+\{\
+	int t = x;\
+	x = y;\
+	y = t;\
+\}\
+\
+int main()\
+\{\
+	...\
+	int a;\
+	int b;\
+	cin >> a >> b;\
+	if (a < b)\
+		exchange (a, b);\
+	cout << a << \'93 is at least as big as \'93 << b << endl;\
+\}\
+\
+\
+\
+char ch = 76;  // \'91L\'92 if ASCII is the encoding, \'91<\'91 if EBCDIC\
+int k = \'91L\'92;  // 76 if ASCII, 211 if EBCDIC\
+\
+a-z are in order (although not necessarily consecutive)\
+A-Z are in order (although not necessarily consecutive)\
+\'910\'92 \'911\'92 .. \'919\'92 are in order and in fact consecutive\
+\
+\
+ch++; // means ch = ch + 1\
+\
+\
+\
+\
+
+\f0\b \
+week 5, wednesday\
+may 2, 2018
+\f1\b0 \
+\
+for ()\
+\{\
+	if ()\
+	\{\
+	...\
+		continue; //abandon the rest of the current iteration, go onto next iteration of nearest enclosing loop\
+	\}\
+\
+	if ()\
+	\{\
+		...\
+		break; //break you out of nearest enclosing loop, end all iterations\
+	\}\
+\}\
+\
+\
+bool isValidDate(int y, int m, int d)\
+\{\
+	if (m < 1 || m > 12 || d < 1)\
+		return false;\
+	if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12)\
+		return d <= 31;\
+	if (m == 4 || m == 6 || m == 9 || m == 11)\
+		return d <= 30;\
+	// At this point, m must be 2 (leap/nonleap year)\
+\}\
+\
+\
+bool isValidDate(int y, int m, int d)\
+\{\
+	const int daysInMonth[12] = \{ \
+		31, 29, 31, 30, 31, 30, \
+		31, 31, 30, 31, 30, 31\
+	\};\
+	if (m < 1 || m > 12 || d < 1)\
+		return false;\
+	if (m != 2)\
+		return d <= daysInMonth[m - 1]; // if m, undefined behavior!!\
+\}\
+\
+\
+switch (m)\
+\{\
+	case 1:\
+		cout << \'93January\'94;\
+		break;\
+	case 2:\
+		cout << \'93February\'94;\
+		break;\
+	...\
+	case 12: cout << \'93December\'94; break;\
+\}\
+\
+const string monthName[12] = \{\
+	\'93January\'94, \'93February\'94, \'93March\'94, ....\
+\};\
+\
+cout << monthName[m-1]; // assumes m is 1 through 12\
+\
+\
+\
+\
+\
+const int NMONTHS = 12;\
+\
+const int daysInMonth[NMONTHS] = \{ ... \};\
+\
+cout << monthName[m - 1];\
+\
+cout << \'93These months have 31 days:\'94 << endl;\
+for (int k = 0; k < NMONTHS; k++)\
+\{\
+	if (daysInMonth[k] == 31)\
+		cout << monthName[k] << endl;\
+\}\
+\
+\
+int scores[...];\
+int nScores = 0;\
+int total = 0;\
+cout << \'93Enter the scores (negative to quit): \'93 << endl;\
+\
+for (;;) // always true\
+\{\
+	int s;\
+	cin >> s;\
+	if (s < 0)\
+		break;\
+	total += s;\
+	nScores++;\
+\}\
+\
+if (nScores == 0)\
+	cout << \'93There were no scores, so no average\'94 << endl;\
+else\
+	cout << \'93The average of all the scores is \'93 << static_case<double>(total)/nScores << endl;\
+\
+OR\
+\
+	double mean = static_cast<double>(total)/nScores;\
+	cout << \'93The average of all the scores is \'93 << mean << endl;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}
