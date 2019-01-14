@@ -1,0 +1,1089 @@
+// Thanks former CS 31 TA Andrew Forney for the set of practice problems and solutions.
+
+/* Q1: 
+Will the following code compile? If so, what will it print out? */
+  #include <iostream>
+  #include <string>
+  using namespace std;
+  
+  int main () {
+      char c[] = "Testing";
+      string t = "Testing";
+  
+      cout << (c == t) << endl;
+  }
+
+/* Q1-solution:
+Yep, that's fine -- a string is expected when we use the == comparison, so a cstring will suffice.
+*/
+
+//====================================
+/* Q2:
+Will the following code compile? If so, what will it print out? */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+  
+  int main () {
+      char c[] = "Testing";
+      string t = "Testing";
+  
+      cout << (strcmp(c, t)) << endl;
+  }
+
+/* Q2-solution:
+Nope, the strcmp will fail since a cstring is expected for both argument, and a C++ string is given for one.
+*/
+
+//====================================
+/* Q3:
+Will the following code compile? If so, what will it print out? */
+  #include <iostream>
+  #include <string>
+  #include <cctype>
+  using namespace std;
+  
+  int mine (int mine);
+  
+  // Less painful if you consider the seagulls saying it
+  int main () {
+      int mine = 5;
+  
+      for (int mine = 0; mine < 10; mine++) {
+          mine = ::mine(mine);
+      }
+  
+      // lol
+      cout << mine << endl;
+  }
+  
+  int mine (int mine) {
+      return mine * mine;
+  }
+
+/* Q3-solution:
+Answer: 5. Why? Because the mine in the loop refers to the iterator, not the one being printed!
+*********Note*********
+:: is the scope resolution operator - used to qualify names. In this case it is used to separate the integer variable "mine" from the function "mine".
+ */
+
+
+//====================================
+/* Q4:
+Will the following code compile? If so, what will it print out? */
+  #include <iostream>
+  #include <string>
+  #include <cctype>
+  using namespace std;
+  
+  int mine (int& mine);
+  
+  // Should I get this much pleasure from making
+  // such horrible problems?
+  int main () {
+      int mine = 5;
+  
+      // Remember what happens at the end of a loop...
+      for (mine = 0; mine < 10; mine++) {
+          mine = ::mine(mine);
+      }
+  
+      cout << mine << endl;
+  }
+  
+  int mine (int& mine) {
+      return mine * mine;
+  }
+/* Q4-solution:
+Answer: 26. Why? The argument to ::mine is passed by reference, and the loop iterator now uses the mine from main since it isn't declared in the loop.
+ */
+
+
+//******Functions******
+
+//====================================
+/* Q5:
+What will this snippet of long, arbitrary code print out? (Warning: annoying and tedious; do last if you feel confident on functions.) */
+  #include <iostream>
+  #include <string>
+  using namespace std;
+  
+  void coolFunc (double& d, int i[], int n);
+  double coolerFunc (double& d);
+  
+  int main () {
+      int i[] = {5, 6, 7};
+      int n = 2;
+      double d = 2.2;
+      coolFunc(d, i, n);
+  
+      cout << "i: ";
+      for (int j = 0; j <= n; j++) {
+          cout << i[j] << " ";
+      }
+      cout << endl <<  "n: " << n << endl;
+      cout << "d: " << d << endl;
+  }
+  
+  void coolFunc (double& d, int i[], int n) {
+      while (n > 0) {
+          i[n] = coolerFunc(d);
+          n--;
+      }
+  }
+  
+  double coolerFunc (double& d) {
+      double result = 0;
+      for (int j = 0; j < d; j++) {
+          result += d;
+          d--;
+      }
+      return result;
+  }
+
+/* Q5-solution:
+  i: 5 0 3
+  n: 2
+  d: -0.8
+ */
+
+//====================================
+/* Q6:
+The following code will work for some input arguments, but may cause issues and overflows with others. Identify which of the following are "UNSAFE" uses (that attempt to overwrite indecies out of bounds) of the cstringSubstr function: */
+
+ // Works just like substr for strings, except that the argument
+  // c is mutated to the substring instead of returning a new substr
+  void cstringSubstr (char c[], int start, int chars) {
+      int len = strlen(c);
+  
+      // If the start pos is greater than the strlen, then
+      // just return the empty cstring
+      if (start >= len) {
+          c[0] = '\0';
+          return;
+      }
+  
+      // Otherwise, start at the start index and keep copying
+      // the characters to the front of the cstring
+      for (int i = 0; i < chars; i++) {
+          c[i] = c[start + i];
+      }
+  
+      // Don't forget to null terminate!
+      c[chars] = '\0';
+  }
+
+
+/* Answer choices: */
+  // A
+  char c[] = "testing";
+  cstringSubstr(c, 0, 5);
+  
+  // B
+  char c[] = "testing";
+  cstringSubstr(c, 0, 7);
+  
+  // C
+  char c[] = "testing\0";
+  cstringSubstr(c, 0, 8);
+  
+  // D
+  char c[] = "test\0ing\0";
+  cstringSubstr(c, 1, 8);
+  
+  // E
+  char c[] = "test";
+  cstringSubstr(c, 2, 6);
+  
+  // F
+  char c[] = {'t', 'e', 's', 't'};
+  cstringSubstr(c, 0, 4);
+  
+  // G
+  char c[] = {'t', 'e', 's', 't', '\0'};
+  cstringSubstr(c, 1, 4);
+  
+  // H
+  char c[] = "";
+  cstringSubstr(c, 0, 1);
+  
+  // I
+  char c[] = "\0";
+  cstringSubstr(c, 1, 1);
+  
+  // J
+  char c[] = "\0";
+  cstringSubstr(c, 0, 2);
+
+/* Q6-solution:
+Unsafe usages: E, F
+ */
+
+//====================================
+/* Q7:
+Design a function, intSums that takes in a 2D array of ints called a, a 1D array of ints called result, and a single int n. The intSums function will place the sums of all n subarrays of a and place them in the corresponding column of result, for all n subarrays. */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  #include <cassert>
+  using namespace std;
+  
+  const int MAX_INTS = 3;
+  
+  /*
+   * Set each element i in result to the sum of
+   * each sub-array / row i in a. Assume MAX_INTS
+   * subarrays in a and columns in result.
+   */
+  void intSums ( ??? ) {
+      for (int i = 0; ???; i++) {
+          ???
+      }
+  }
+  
+  int main () {
+      int a[][MAX_INTS] = {
+          {1, 2, 3},
+          {0, 0, 0},
+          {5, -5, 1}
+      };
+      int result[MAX_INTS];
+  
+      intSums(a, result, MAX_INTS);
+  
+      assert(result[0] == 6 && result[1] == 0 && result[2] == 1);
+  
+      cout << "[!] ALL TEST(S) PASSED" << endl;
+  }
+
+/* Q7-solution: */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  #include <cassert>
+  using namespace std;
+  
+  const int MAX_INTS = 3;
+  
+  /*
+   * Set each element i in result to the sum of
+   * each sub-array / row i in a
+   */
+  void intSums (int a[][MAX_INTS], int result[], int n) {
+      for (int i = 0; i < n; i++) {
+          result[i] = 0;
+          for (int j = 0; j < MAX_INTS; j++) {
+              result[i] += a[i][j];
+          }
+      }
+  }
+  
+  int main () {
+      int a[][MAX_INTS] = {
+          {1, 2, 3},
+          {0, 0, 0},
+          {5, -5, 1}
+      };
+      int result[MAX_INTS];
+  
+      intSums(a, result, MAX_INTS);
+  
+      assert(result[0] == 6 && result[1] == 0 && result[2] == 1);
+  
+      cout << "[!] ALL TESTS PASSED" << endl;
+  }
+
+
+//====================================
+/* Q8:
+Design a function trim that takes in a string by reference and removes all trailing and leading whitespace. */
+ int main () {
+      string s1 = "   test   "; 
+      string s2 = "   ";
+      string s3 = " test this ";
+      
+      trim(s1);
+      trim(s2);
+      trim(s3);
+      
+      assert(s1 == "test");
+      assert(s2 == "");
+      assert(s3 == "test this");
+  }
+
+/* Q8-solution: */
+  void trim (string& s) {
+      if (s.empty()) {
+          return;
+      }
+  
+      int firstChar = 0,
+          lastChar = s.length() - 1;
+  
+      // Move the firstChar index inwards to find the first non-space
+      // character, and then the lastChar index inwards to find the last
+      // non-space character
+      while (s[firstChar] == ' ' && firstChar < s.length()) {
+          firstChar++;
+      }
+      while (s[lastChar] == ' ' && lastChar > 0) {
+          lastChar--;
+      }
+  
+      // If they passed each other, then there were all spaces
+      if (firstChar > lastChar) {
+          s = "";
+  
+      // Otherwise, we can substr to get the right result
+      // Note the +1 at the length because lastChar finds the
+      // index of the last char, which would otherwise not include
+      // the last char from the call to substr
+      } else {
+          s = s.substr(firstChar, lastChar - firstChar + 1);
+      }
+  }
+
+//====================================
+/* Q9:
+Implement the isDoubleString function below, which determines whether or not the input string is a string representation of a decimal number with possible leading / ending whitespace. 
+You may (read: should) use your trim function from the previous exercise for this problem. */
+  #include <iostream>
+  #include <cctype>
+  #include <cassert>
+  #include <string>
+  
+  using namespace std;
+  
+  void trim (string& s) {
+      // ...
+  }
+  
+  bool isDoubleString (string s) {
+      // ???
+      for (int i = 0; i < s.length(); i++) {
+          // ???
+      }
+      // ???
+  }
+    
+  int main () {
+      assert(  isDoubleString("1.23")); // True
+      assert(  isDoubleString("1")); // True
+      assert(  isDoubleString("  1.23  ")); // True
+      assert(  isDoubleString(".23")); // True
+      assert(! isDoubleString("  1.  23  ")); // False
+      assert(! isDoubleString("1.2.3.4")); // False
+      assert(! isDoubleString("I IZ DUBLE :DDD")); // False
+      assert(! isDoubleString("1a.23")); // False
+      assert(! isDoubleString("a1.23")); // False
+      assert(! isDoubleString("")); // False
+  
+      cerr << "[!] ALL TESTS PASSED!" << endl;
+  }
+
+/* Q9-solution: */
+  bool isDoubleString (string s) {
+      // Set up flags, which will see if we've found a digit
+      // or decimal yet
+      bool foundFirstDigit = false,
+           foundDecimal = false;
+      
+      // Purge our string of trailing / leading whitespace
+      trim(s);
+  
+      for (int i = 0; i < s.length(); i++) {
+          // Case where we've seen a digit
+          if (isdigit(s[i])) {
+              foundFirstDigit = true;
+                
+          // Case where we've seen a decimal point
+          } else if (s[i] == '.') {
+              if (foundDecimal) {
+                  // Case where we've seen 2 decimals
+                  return false;
+              }
+              foundDecimal = true;
+          
+          // Catch-all for bad chars
+          } else {
+              return false;
+          }
+      }
+      
+      // If we reach this point, we have a legal double-string so long as
+      // at least one digit was found
+      return foundFirstDigit;
+  }
+
+//*******cstrings*******
+//====================================
+/* Q10:
+What will the following code print out? */
+  #include <iostream>
+  #include <string>
+  #include <cctype>
+  using namespace std;
+    
+  const int MAX_CSTRING_LENGTH = 100;
+  
+  int main () {
+      char haiku[][MAX_CSTRING_LENGTH] = {
+          "Do you like this test?",
+          "I think it is very good",
+          "I'm not good at poems"
+      };
+  
+      for (int i = 0; i < 3; i++) {
+          for (int j = 0; j < strlen(haiku[i]); j++) {
+              haiku[i][strlen(haiku[i]) - 1] = '\0';
+          }
+          cout << haiku[i] << endl;
+      }
+      // End result is still a better poem...
+  }
+/* Q10-solution:
+  Do you like
+  I think it
+  I'm not go
+ */
+
+//====================================
+/* Q11:
+Design a function cstringSecretMessage that takes as input a cstring and a number n, which is the number of characters in the cstring to examine. The function will then look at each of the cstring's first n characters, and prints out a word (assume to be never larger than, say, 100 chars) whenever it finds one between null characters. It will finish whenever it reaches n characters, or when it encounters 3 null characters in a row. */
+  int main () {
+      char c[] = "Nothing to see here!\0HELP\0TRAPPED\0IN\0CS\0-31!!!\0";
+      cstringSecretMessage(c, 47);
+      // Prints:
+      // Nothing to see here!
+      // HELP
+      // TRAPPED
+      // IN
+      // CS
+      // 31!!!
+      
+      cout << " ------------ " << endl;
+  
+      cstringSecretMessage(c, 36);
+      // Prints:
+      // Nothing to see here!
+      // HELP
+      // TRAPPED
+      
+      cout << " ------------ " << endl;
+  
+      char t[] = "Just us letters!\0DON'T\0LISTEN\0IT'S\0A\0TRAP!!!\0\0\0AIEEE!\0";
+      cstringSecretMessage(t, 1000);
+      // Prints:
+      // Just us letters!
+      // DON'T
+      // LISTEN
+      // IT'S
+      // A
+      // TRAP!!!
+  }
+
+/* Q11-solution: */
+  void cstringSecretMessage(char c[], int n) {
+      string s;
+      int nullCounter = 0;
+      
+      // Iterate through the encoded string one char
+      // at a time
+      for (int j = 0; j < n; j++) {
+        
+          // If it's a null char, we'll increment our
+          // null counter, print all the chars we collected
+          // up until now, and then wipe the string clean
+          if (c[j] == '\0') {
+              nullCounter++;
+              cout << s << endl;
+              s = "";
+              
+          // Otherwise, it was a char to print out, so add that
+          // to our string to print out, and reset nullCounter
+          } else {
+              nullCounter = 0;
+              s += c[j];
+          }
+          
+          // We'll terminate whenever we see 3 null chars in a
+          // row
+          if (nullCounter == 3) {
+              return;
+          }
+      }
+  }
+
+//====================================
+/* Q12:
+Design a function called inflateCString that takes in a cstring and adds a number of null characters at the specified index, shifting the rest of the cstring after index down by a proportional number of indecies. */
+  #include <iostream>
+  #include <cstring>
+  #include <cctype>
+  using namespace std;
+  
+  void inflateCString (char c[], int index, int spaces);
+  
+  int main () {
+      // Cuz it's inflated...
+      char hotAir[100] = "balloon!";
+      inflateCString(hotAir, 0, 2);
+      // hotAir is now: "\0\0balloon!\0"
+      assert(hotAir[0] == '\0' && hotAir[1] == '\0' && !strcmp(hotAir+2, "balloon!"));
+    
+      // Political / Economic zinger!
+      char usDollar[100] = "so poor!";
+      inflateCString(usDollar, 3, 1);
+      // usDollar is now: "so \0poor!\0"
+      assert(usDollar[3] == '\0' && !strcmp(usDollar, "so ") && !strcmp(usDollar+4, "poor!"));
+  
+      // :/
+      char andrewsEgo[100] = ""; // not to be confused with breakfast treat
+      inflateCString(andrewsEgo, 0, 2);
+      // andrewsEgo is now: "\0\0\0",
+      // more empty than ever before
+      assert(andrewsEgo[0] == '\0' && andrewsEgo[1] == '\0' && andrewsEgo[2] == '\0');
+  }
+  
+  void inflateCString (char c[], int index, int spaces) {
+      // ...
+  }
+
+/* Q12-solution: */
+  void inflateCString (char c[], int index, int spaces) {
+      // Gather the size once; danger if we recompute
+      // at each iteration, or at least not efficient
+      int size = strlen(c);
+  
+      // Shift all of the current elements down by spaces
+      // amount
+      for (int i = size; i >= index; i--) {
+          c[i + spaces] = c[i];
+      }
+  
+      // Add the null bytes in place of those we just
+      // shifted down
+      for (int j = 0; j < spaces; j++) {
+          c[index + j] = '\0';
+      }
+  }
+
+//====================================
+/* Q13:
+Using inflateCString that you did above, create a function injectText that takes as input a cstring, some text to inject into it, and then the index at which to inject said text. */
+#include <iostream>
+  #include <cstring>
+  #include <cctype>
+  using namespace std;
+  
+  void injectText (char c[], int index, char injection[]);
+  
+  int main () {
+      char stimpack[100] = "nnHmmm";
+      injectText(stimpack, 2, "AIEEE");
+      // Prints "nnAIEEEHmmm"
+      cout << stimpack << endl;
+  
+      // Make sure to get yours today, kids!
+      char fluShot[100] = "";
+      injectText(fluShot, 0, "Go Ashe Center!");
+      // Prints "Go Ashe Center!"
+      cout << fluShot << endl;
+  }
+  
+  void injectText (char c[], int index, char injection[]) {
+      // ...
+  }
+
+/* Q13-solution: */
+  void injectText (char c[], int index, char injection[]) {
+      int size = strlen(injection);
+  
+      // First make room for the text
+      inflateCString(c, index, size);
+  
+      // Then place it where you just made room
+      for (int i = 0; i < size; i++) {
+          c[index + i] = injection[i];
+      }
+  }
+
+//******Multidimensional Arrays******
+
+//====================================
+/* Q14:
+For the following code, determine which printed statements will return a determinate value (always known) and which return an indeterminate value (not known). List the determinate values. */
+  #include <iostream>
+  #include <string>
+  #include <cctype>
+  using namespace std;
+  
+  const int ROWS = 2;
+  const int COLUMNS = 3;
+  // Probably not the proper term, but how often
+  // do you get to say HYPER_ROWS?
+  const int HYPER_ROWS = 2;
+  
+  int main () {
+      int megaArray[HYPER_ROWS][ROWS][COLUMNS] = {
+          {
+              {1, 2},
+              {3, 4, 1}
+          },
+          {
+              {-20, 100}
+          }
+      };
+  
+      cout << megaArray[0][1][2] << endl; // #1
+      // We have to go deeper!
+      cout << megaArray[0][megaArray[0][0][1]][2] << endl; //#2
+      cout << megaArray[1][megaArray[0][1][2] - 1][1] << endl; // #3
+      // Still with us?
+      cout << megaArray[0][megaArray[0][1][1]][1] << endl; // #4
+  }
+
+/* Q14-solution:
+  #1: Determinate, 1
+  #2: Indeterminate
+  #3: Determinate, 100
+  #4: Indeterminate
+ */
+
+//******Code Triage******
+//====================================
+/* Q15:
+Noob A. Nooberson attempted to solve the isDoubleString problem presented above and threw up the following monstrosity; which test cases in the main function will it fail? */
+  #include <iostream>
+  #include <string>
+  #include <cctype>
+  using namespace std;
+  
+  bool isDoubleString (string s);
+  
+  // Problem numbers listed with their intended output:
+  int main () {
+      cout << isDoubleString("1.23") << endl; // #1, True
+      cout << isDoubleString("  1.23  ") << endl; // #2, True
+      cout << isDoubleString(".23") << endl; // #3, True
+      cout << isDoubleString("  1.  23  ") << endl; // #4, False
+      cout << isDoubleString("1.2.3.4") << endl; // #5, False
+      cout << isDoubleString("I IZ DUBLE :DDD") << endl; // #6, False
+      cout << isDoubleString("1a.23") << endl; // #7, False
+      cout << isDoubleString("a1.23") << endl; // #8, False
+      cout << isDoubleString("") << endl; // #9, False
+  }
+  
+  // Determines whether or not the input string is a string representation
+  // of a decimal number with possible leading / ending spaces
+  bool isDoubleString (string s) {
+      for (int i = 0; i < s.length(); i++) {
+          if (s[i] == ' ') {
+              continue;
+          }
+          if (!(isdigit(s[i]) || s[i] == '.')) {
+              return false;
+          }
+      }
+      return true;
+  }
+/* Q15-solution:
+  Failed Tests:
+  4, 5, 9
+ */
+
+//====================================
+/* Q16:
+Lame O. Badprogrammer, apart from being born to the same parents who named Noob A. Nooberson and somehow changed his last name (shut up, I made you a practice midterm), attempted to solve the selfStrcat problem, which appends a cstring to itself, and made a small, insidious error. Where is the problem, and how could you fix it? */
+  #include <iostream>
+  #include <cstring>
+  #include <cctype>
+  using namespace std;
+  
+  void selfStrcat (char c[]);
+  
+  int main () {
+      char c[100] = "Finally, I'll work!";
+      selfStrcat(c);
+  
+      // Prints: "Finally, I'll work!Finally, I'll work!"
+      cout << c << endl;
+  
+      char t[100] = "";
+      selfStrcat(t);
+  
+      // Prints: ""
+      cout << t << endl;
+  
+      char devious[100] = "HA!\0HA!\0";
+      selfStrcat(devious);
+  
+      // Prints: "HA!HA!"
+      cout << devious << endl;
+  }
+  
+  void selfStrcat (char c[]) {
+      int len = strlen(c);
+  
+      for (int i = 0; i < 2 * len; i++) {
+          c[i] = c[i % len];
+      }
+      c[strlen(c)] = '\0';
+  }
+
+/* Q16-solution:
+The line c[strlen(c)] = '\0'; recomputes the length of c before null terminating, inviting errors like in the test with the cstring devious. You can fix this by replacing it with: c[len * 2] = '\0';, since len was computed before any modifications were made to the original cstring.
+ */
+
+//====================================
+/* Q17:
+James T. Buzzkillington III, Esq. attempted to implement the injectText function covered during class, but made one mistake that will embarrass him greatly at the next clubhouse meating. FIND IT. */
+  #include <iostream>
+  #include <cstring>
+  #include <cctype>
+  using namespace std;
+  
+  void inflateCString (char c[], int index, int spaces);
+  void injectText (char c[], int index, char injection[]);
+  
+  int main () {
+      char stimpack[] = "nnHmmm";
+      injectText(stimpack, 2, "AIEEE");
+      // Prints "nnAIEEEHmmm"
+      cout << stimpack << endl;
+  
+      // Make sure to get yours today, kids!
+      char fluShot[] = "";
+      injectText(fluShot, 0, "Go Ashe Center!");
+      // Prints "Go Ashe Center!"
+      cout << fluShot << endl;
+  }
+  
+  void inflateCString (char c[], int index, int spaces) {
+      // Assume implemented correctly; see answer above
+  }
+  
+  void injectText (char c[], int index, char injection[]) {
+      int len = strlen(c),
+          injectionLen = strlen(injection);
+  
+      // Begin by leaving space for the injection
+      inflateCString(c, index, injectionLen);
+  
+      // Add the injection at the space we just made, which we
+      // know will end with a null character and have enough room
+      // for the injection text
+      strcat(c, injection);
+  }
+
+/* Q17-solution:
+ The line strcat(c, injection); will incorrectly null-terminate after the insertion for valid cstrings in parameter injection.
+ */
+
+//====================================
+/* Q18:
+<// TODO: INSERT VAGUELY HUMOROUS NAME HERE> tried to implement stringArrayMatch, which compares an array of strings and array of cstrings, and replaces each matching element with the characters "MATCH"... but they failed horribly and were forced to take a job as a TA. Where is the error? Fix it! */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 100;
+  const int ARRAY_ROWS = 3;
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n);
+  
+  int main () {
+      string s[] = {"this", "func", "ROCKS"};
+      char c[][MAX_CSTRING_LENGTH] = {"This", "func", "rocks"};
+      stringArrayMatch(s, c, ARRAY_ROWS);
+      
+      for (int i = 0; i < 3; i++) {
+          cout << "s[" << i << "]: " << s[i] << endl;
+          cout << "c[" << i << "]: " << c[i] << endl;
+      }
+  }
+  
+  
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n) {
+      for (int i = 0; i < n; i++) {
+          bool match = true;
+          for (int j = 0; j < s[i].length(); j++) {
+              if (s[i][j] != c[i][j]) {
+                  match = false;
+                  return;
+              }
+          }
+          if (match) {
+              s[i] = "MATCH";
+              strcpy(c[i], "MATCH");
+          }
+      }
+  }
+
+/* Q18-solution:
+In the case of no match at a character, we should not return from the function, but simply break from that inner loop; specifically:
+
+  // ...
+  if (s[i][j] != c[i][j]) {
+      match = false;
+      return; // [!] Should be break;
+  }
+  // ...
+ */
+
+//====================================
+/* Q19:
+Before he entered the Matrix, Neo was a supernoob who couldn't code to save his life. Below, in order to save him time typing in 13375P34K, he wanted to make a function that could replace all lowercase Os with zeroes, and all uppercase As with fours in each cstring in an array of an array of cstrings. Find and fix all of his syntax errors below so that the code behaves as "intended," and he doesn't have to ask Trinity for help. */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  #include <cctype>
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 1000 + 1;
+  const int CSTRING_ROWS = 3;
+  const int CSTRINGS = 3;
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar);
+  
+  int main () {
+      char lotsODimensions[][][MAX_CSTRING_LENGTH] = {
+          {"Test", "Yo", "Arrays"},
+          {"Numbers too", "1234", "Countin meng"},
+          {"", "That one was blank.", "crazy man"}
+      };
+  
+      nukeAllChars(lotsODimensions, 'o');
+      nukeAllChars(lotsODimensions, 'A');
+  
+      // Select sample
+      cout << lotsODimensions[0][0] << endl;
+      cout << lotsODimensions[0][1] << endl;
+      cout << lotsODimensions[0][2] << endl;
+      cout << lotsODimensions[1][0] << endl;
+      cout << lotsODimensions[2][0] << endl;
+      cout << lotsODimensions[2][1] << endl;
+  }
+  
+  // Replaces all instances of toBeNuked in c with the nukedChar
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar) {
+      for (int i = 0; i < CSTRING_ROWS; i++) {
+          for (int j = 0; j < CSTRINGS; j++) {
+              int len = strlen(c[i][j]);
+              for (int k = 0; k < len; k++) {
+                  if (strcmp(c[i][j][k], toBeNuked) == 0) {
+                      c[i][j][k] = nukedChar;
+                  }
+              }
+          }
+      }
+  }
+
+/* Q19-solution:
+Listing of all errors:
+
+  // #1: Function prototype and signature for nukeAllChars is missing an array 
+  // dimension specification for parameter c; should be:
+  void nukeAllChars (char c[][CSTRING_ROWS][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar) ...
+  
+  // #2: lotsODimensions is missing an array dimension specification; should be:
+  char lotsODimensions[][CSTRING_ROWS][MAX_CSTRING_LENGTH] = { ... };
+  
+  // #3: Calls to nukeAllChars in main are missing the nukedChar parameters:
+  nukeAllChars(lotsODimensions, 'o', '0');
+  nukeAllChars(lotsODimensions, 'A', '4');
+  
+  // #4: strcmp is not well defined for characters! As such, its attempt to be used so is 
+  // incorrect within the function, and should be:
+  if (c[i][j][k] == toBeNuked) {
+      c[i][j][k] = nukedChar;
+  }
+ */
+
+//====================================
+/* Q20:
+Someone (OK fine, me while I was making the answer) tried to implement the csReverse function from Week 6, which takes in a cstring and reverses the characters in it. What did they, very understandably, do wrong below? */
+ #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+  
+  void csReverse (char c[]) {
+      int size = strlen(c);
+      for (int i = 0; i < size / 2; i++) {
+          char holder = c[i];
+          c[i] = c[size - i];
+          c[size - i] = holder;
+      }
+  }
+
+/* Q20-solution:
+Each index access for [size - i] should be [size - i - 1] since we do not take the null byte into account as it currently is.
+ */
+
+//====================================
+/* Q21:
+Design a function, csReverse, that takes in a cstring and reverses the order of characters in it. */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+  
+  void csReverse (char c[]) {
+      // [!] Save the cstring size
+      int size = ???;
+      
+      // [!] We'll flip each character from the
+      // front with the ones at the end, moving our
+      // iterator inwards...
+      // What should be our terminating condition?
+      for (int i = 0; ???; i++) {
+          // Save c[i] into a temp variable
+          char holder = c[i];
+          
+          // [!] Set c[i] to the one on the end
+          // (remember we're iterating inwards)
+          c[i] = c[ ??? ];
+          
+          // [!] Then set that equal to the holder
+          c[ ??? ] = holder;
+      }
+  }
+    
+  int main () {
+      char c1[] = "testz";
+      char c2[] = "!";
+      char c3[] = "";
+  
+      csReverse(c1);
+      csReverse(c2);
+      csReverse(c3);
+  
+      cout << c1 << endl;
+      cout << c2 << endl;
+      cout << c3 << endl;
+  }
+
+/* Q21-solution: */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+    
+  void csReverse (char c[]) {
+      // [!] Save the cstring size
+      int size = strlen(c);
+        
+      // [!] We'll flip each character from the
+      // front with the ones at the end, moving our
+      // iterator inwards...
+      // What should be our terminating condition?
+      for (int i = 0; i < size / 2; i++) {
+          // Save c[i] into a temp variable
+          char holder = c[i];
+            
+          // [!] Set c[i] to the one on the end
+          // (remember we're iterating inwards)
+          c[i] = c[size - i - 1];
+            
+          // [!] Then set that equal to the holder
+          c[size - i - 1] = holder;
+      }
+  }
+      
+  int main () {
+      char c1[] = "testz";
+      char c2[] = "!";
+      char c3[] = "";
+    
+      csReverse(c1);
+      csReverse(c2);
+      csReverse(c3);
+    
+      cout << c1 << endl;
+      cout << c2 << endl;
+      cout << c3 << endl;
+  }
+
+
+//====================================
+/* Q22:
+Design a function, multiCStringAppend, that takes in an array of cstrings and a single cstring, and appends toAppend to each of n elements of target. */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+  
+  const int MAX_CSTRING_SIZE = 20 + 1;
+  
+  /*
+   * Appends cstring toAppend to each cstring in target
+   */
+  void multiCStringAppend (char target[][MAX_CSTRING_SIZE], char toAppend[], int n) {
+      // Simply iterate through all n elements in
+      // the target...
+      for (int i = 0; i < n; i++) {
+          // ...and append toAppend to each element
+          ???
+      }
+  }
+    
+  int main () {
+      char c1[][MAX_CSTRING_SIZE] =
+      {
+          "test",
+          "my",
+          "function!"
+      };
+  
+      multiCStringAppend(c1, " yay!", 3);
+  
+      for (int i = 0; i < 3; i++) {
+          cout << c1[i] << endl;
+      }
+  }
+
+/* Q22-solution: */
+  #include <iostream>
+  #include <string>
+  #include <cstring>
+  using namespace std;
+    
+  const int MAX_CSTRING_SIZE = 20 + 1;
+    
+  /*
+  * Appends cstring toAppend to each cstring in target
+  */
+  void multiCStringAppend (char target[][MAX_CSTRING_SIZE], char toAppend[], int n) {
+      // Simply iterate through all n elements in
+      // the target...
+      for (int i = 0; i < n; i++) {
+          // ...and append toAppend to each element
+          strcat(target[i], toAppend);
+      }
+  }
+      
+  int main () {
+      char c1[][MAX_CSTRING_SIZE] =
+      {
+          "test",
+          "my",
+          "function!"
+      };
+    
+      multiCStringAppend(c1, " yay!", 3);
+    
+      for (int i = 0; i < 3; i++) {
+          cout << c1[i] << endl;
+      }
+  }
+
+//====================================
+/* Q23:
+Design a function multiCStringReverse that uses your csReverse function on every element of an input array of cstrings. */
+
+//====================================
+/* (END OF EXERCISES)
+THANK YOU VERY MUCH!
+GOOD LUCK FOR THE EXAM! (^-^)
+ */
